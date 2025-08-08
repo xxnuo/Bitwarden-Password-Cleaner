@@ -99,6 +99,7 @@ def DoH_query(hostname):
     return flag
 
 def get_valid_url(uri):
+    return uri, None
     # 如果 uri 为空
     if not uri:
         return None, f"uri 为空"
@@ -161,7 +162,7 @@ if __name__ == "__main__":
         # 检查 item_name 是否有 /
         if '/' in item_name:
             print(f"[yellow]> 项目名称中有 /: {item_name}")
-            item_name = add_https_to_uri(item_name)
+            # item_name = add_https_to_uri(item_name)
             name_part = urlsplit(item_name).netloc
             # 如果 name_part 为空
             if not name_part:
@@ -198,12 +199,12 @@ if __name__ == "__main__":
             if flag:
                 continue
 
-        # 确保 uris, username 和 password 不为 None
-        if uris is None or username is None or password is None:
-            print("[yellow]> 跳过项目，因为缺少数据")
-            item['notes'] = "跳过项目，因为缺少数据"
-            items_need_check.append(item)
-            continue
+        # # 确保 uris, username 和 password 不为 None
+        # if uris is None or username is None or password is None:
+        #     print("[yellow]> 跳过项目，因为缺少数据")
+        #     item['notes'] = "跳过项目，因为缺少数据"
+        #     items_need_check.append(item)
+        #     continue
 
         corrected_uris = []
         for uri_data in uris:
@@ -213,7 +214,8 @@ if __name__ == "__main__":
                 print(f"[red]> 一条记录的 uri 为空")
                 continue
 
-            url = add_https_to_uri(uri)
+            # url = add_https_to_uri(uri)
+            url = uri
             uri_parts = urlsplit(url)
             scheme, netloc, path, _, _ = uri_parts        
             if not netloc:
@@ -259,13 +261,13 @@ if __name__ == "__main__":
     # 保存最终数据，包括更新和删除的项目
     data['items'] = items_ready_for_write
     with open(output_file_name, 'w') as output_file:
-        json.dump(data, output_file, indent=2)
+        json.dump(data, output_file, indent=2, ensure_ascii=False)
 
     with open(deleted_file_name, 'w') as deleted_file:
-        json.dump(items_deleted, deleted_file, indent=2)
+        json.dump(items_deleted, deleted_file, indent=2, ensure_ascii=False)
 
     with open(check_file_name, 'w') as check_file:
-        json.dump(items_need_check, check_file, indent=2)
+        json.dump(items_need_check, check_file, indent=2, ensure_ascii=False)
 
     print(f"处理了 {processed_items} 个项目，共 {total_items} 个。")
     print(f"删除的项目: {len(items_deleted)}")
