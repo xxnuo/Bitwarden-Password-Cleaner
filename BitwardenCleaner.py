@@ -180,6 +180,7 @@ if __name__ == "__main__":
             print("[red]> 没有 login 字段, 跳过")
             item['notes'] = "没有 login 字段"
             items_need_check.append(item)
+            add_items_to_write(item)
             continue
 
         uris = item['login']['uris']
